@@ -13,13 +13,13 @@ By running a single command, you will get a production-ready Node.js app install
 To create a project, simply run:
 
 ```bash
-npx create-nodejs-express-app <project-name>
+npx create-nodejs-express-app timeflar-backend
 ```
 
 Or
 
 ```bash
-npm init nodejs-express-app <project-name>
+npm init nodejs-express-app timeflar-backend
 ```
 
 ## Manual Installation
