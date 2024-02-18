@@ -40,7 +40,7 @@ const userSchema = mongoose.Schema(
       enum: roles,
       default: 'user',
     },
-    is_manager: {
+    isManager: {
       type: Boolean,
       default: false,
     },
@@ -48,7 +48,7 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    managed_projects: {
+    managedProjects: {
       type: Array,
     },
     projects: {

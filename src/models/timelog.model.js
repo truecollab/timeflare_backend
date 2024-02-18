@@ -3,11 +3,11 @@ const { toJSON } = require('./plugins');
 
 const timelogSchema = mongoose.Schema(
   {
-    start_time: {
+    startTime: {
       type: Date,
       required: true,
     },
-    end_time: {
+    endTime: {
       type: Date,
       required: true,
     },
@@ -15,17 +15,17 @@ const timelogSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    project_id: {
+    projectId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: true,
     },
-    user_id: {
+    userId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: true,
     },
-    created_date: {
+    createdDate: {
       type: Date,
       required: true,
     },
