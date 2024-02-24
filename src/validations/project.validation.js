@@ -2,12 +2,11 @@ const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
 const createProject = {
-  params: Joi.object().keys({
-    managerId: Joi.required().required().custom(objectId),
-  }),
   body: Joi.object().keys({
-    name: Joi.string().required(),
-    members: Joi.array().required,
+    createdBy: Joi.required().required().custom(objectId),
+    title: Joi.string().required(),
+    users: Joi.array(),
+    meta: Joi.array(),
   }),
 };
 
@@ -19,60 +18,49 @@ const getProjectDetailsById = {
 
 const getAllProjects = {
   params: Joi.object().keys({
-    managerId: Joi.required().custom(objectId),
+    createdBy: Joi.required().custom(objectId),
   }),
 };
 
 const deleteProjectById = {
   params: Joi.object().keys({
-    managerId: Joi.string().required().custom(objectId),
+    projectId: Joi.string().required().custom(objectId),
   }),
   body: Joi.object().keys({
-    id: Joi.string().required().custom(objectId),
+    createdBy: Joi.string().required().custom(objectId),
   }),
 };
 
 const deteteAllProjects = {
   params: Joi.object().keys({
-    managerId: Joi.string().required().custom(objectId),
+    createdBy: Joi.string().required().custom(objectId),
   }),
 };
 
-const updateProject = {
+const updateProjectById = {
   params: Joi.object().keys({
-    managerId: Joi.required().required().custom(objectId),
+    projectId: Joi.required().required().custom(objectId),
   }),
   body: Joi.object().keys({
-    id: Joi.string().required().custom(objectId),
-    name: Joi.string(),
-    members: Joi.array(),
+    createdBy: Joi.required().required().custom(objectId),
+    title: Joi.string(),
     meta: Joi.array(),
   }),
 };
 
-const addMemberToProject = {
+const manageMembersToProject = {
   params: Joi.object().keys({
-    managerId: Joi.required().required().custom(objectId),
+    projectId: Joi.required().required().custom(objectId),
   }),
   body: Joi.object().keys({
-    id: Joi.string().required().custom(objectId),
-    memberId: Joi.string().required().custom(objectId),
-  }),
-};
-
-const deleteMemberFromProject = {
-  params: Joi.object().keys({
-    managerId: Joi.required().required().custom(objectId),
-  }),
-  body: Joi.object().keys({
-    id: Joi.string().required().custom(objectId),
-    memberId: Joi.string().required().custom(objectId),
+    createdBy: Joi.required().required().custom(objectId),
+    users: Joi.array(),
   }),
 };
 
 const deleteAllMemberFromProject = {
   params: Joi.object().keys({
-    managerId: Joi.required().required().custom(objectId),
+    createdBy: Joi.required().required().custom(objectId),
   }),
   body: Joi.object().keys({
     id: Joi.string().required().custom(objectId),
@@ -81,12 +69,11 @@ const deleteAllMemberFromProject = {
 
 module.exports = {
   createProject,
-  updateProject,
+  updateProjectById,
   getProjectDetailsById,
   getAllProjects,
   deleteProjectById,
   deteteAllProjects,
-  addMemberToProject,
-  deleteMemberFromProject,
+  manageMembersToProject,
   deleteAllMemberFromProject,
 };

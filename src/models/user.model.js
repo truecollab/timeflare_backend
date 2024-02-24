@@ -95,9 +95,9 @@ userSchema.pre('save', async function (next) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   // Add the user ID to the projects array if it's not already included
-  if (!this.projects.includes(this.id)) {
-    this.projects.unshift(this.id); // Add the user ID as the first element
-  }
+  // if (!this.projects.includes(this.id)) {
+  //   this.projects.unshift(this.id); // Add the user ID as the first element
+  // }
   next();
 });
 
