@@ -14,15 +14,19 @@ const createProject = async (projectBody) => {
     if (!user) {
       throw new ApiError(httpStatus.NOT_FOUND, `User with ID ${userId} not found`);
     }
-    user.projects.push(project.id);
-    await user.save();
+    if (!user.projects.includes(project.id)) {
+      user.projects.push(project.id);
+      await user.save();
+    }
   });
   const user = await User.findById(projectBody.createdBy);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, `User with ID ${projectBody.createdBy} not found`);
   }
-  user.managedProjects.push(project.id);
-  await user.save();
+  if (!user.managedProjects.includes(project.id)) {
+    user.managedProjects.push(project.id);
+    await user.save();
+  }
   return project;
 };
 

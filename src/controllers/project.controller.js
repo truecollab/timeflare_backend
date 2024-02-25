@@ -24,11 +24,6 @@ const updatetProjectById = catchAsync(async (req, res) => {
   res.send(project);
 });
 
-const updateUser = catchAsync(async (req, res) => {
-  const user = await projectService.updateUserById(req.params.userId, req.body);
-  res.send(user);
-});
-
 const deleteProjectById = catchAsync(async (req, res) => {
   await projectService.deleteProjectById(req.params.projectId, req.body);
   res.status(httpStatus.NO_CONTENT).send();
@@ -53,7 +48,6 @@ module.exports = {
   createProject,
   getProjectById,
   updatetProjectById,
-  updateUser,
   deleteProjectById,
   addProjectMembers,
   deleteProjectMembers,

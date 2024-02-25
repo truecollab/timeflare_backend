@@ -20,14 +20,17 @@ const timelogSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    userId: {
+    createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: true,
     },
-    createdDate: {
-      type: Date,
-      required: true,
+    remarks: {
+      type: Array,
+    },
+    isEditable: {
+      type: Boolean,
+      default: true,
     },
   },
   {
