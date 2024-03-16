@@ -1,4 +1,4 @@
-const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
+const { Strategy: JwtStrategy, ExtractJwt, Strategy: GoogleStrategy  } = require('passport-jwt');
 const config = require('./config');
 const { tokenTypes } = require('./tokens');
 const { User } = require('../models');
@@ -25,6 +25,25 @@ const jwtVerify = async (payload, done) => {
 
 const jwtStrategy = new JwtStrategy(jwtOptions, jwtVerify);
 
+// const googleStrategy = new GoogleStrategy(
+//   {
+//     clientID: config.google.clientId,
+//     clientSecret: config.google.clientSecret,
+//     callbackURL: config.google.callbackURL,
+//   },
+//   async (accessToken, refreshToken, profile, done) => {
+//     try {
+//       const user = await User.findOrCreate({ googleId: profile.id });
+//       return done(null, user);
+//     } catch (error) {
+//       return done(error);
+//     }
+//   }
+
+  
+// );
+ 
 module.exports = {
-  jwtStrategy,
+  jwtStrategy
+  
 };

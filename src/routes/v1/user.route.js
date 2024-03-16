@@ -5,7 +5,7 @@ const userValidation = require('../../validations/user.validation');
 const userController = require('../../controllers/user.controller');
 
 const router = express.Router();
-
+//v1/users/ is the endpoint
 // router
 //   .route('/')
 //   .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
