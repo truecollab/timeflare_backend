@@ -27,10 +27,6 @@ const createProject = async (projectBody) => {
     user.managedProjects.push(project.id);
     await user.save();
   }
-  if (!user.projects.includes(project.id)) {
-    user.projects.push(project.id);
-    await user.save();
-  }
   return project;
 };
 
