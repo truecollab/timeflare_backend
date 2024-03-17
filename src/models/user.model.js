@@ -49,11 +49,11 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     managedProjects: {
-      type: [mongoose.Schema.Types.ObjectId], // Assuming managedProjects are referencing other documents
+      type: [], // Assuming managedProjects are referencing other documents
       ref: 'Project', // Assuming managedProjects refer to documents in a 'Project' collection
     },
     projects: {
-      type: [mongoose.Schema.Types.ObjectId], // Assuming projects are referencing other documents
+      type: [], // Assuming projects are referencing other documents
       ref: 'Project', // Assuming projects refer to documents in a 'Project' collection
       default: [], // Set the default value as an empty array
     },
