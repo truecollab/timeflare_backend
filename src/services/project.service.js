@@ -59,7 +59,7 @@ const getProjectById = async (projectId) => {
  * @returns {Promise<Project>}
  */
 const getAllProjectByUserId = async (userId) => {
-  const userData = User.findById(userId);
+  const userData = await User.findById(userId);
   if (!userData) {
     throw new ApiError(httpStatus.NOT_FOUND, `User with ID ${userId} not found`);
   }

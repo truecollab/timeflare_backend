@@ -45,7 +45,7 @@ const viewProjectMembers = catchAsync(async (req, res) => {
 });
 
 const getAllProjectByUserId = catchAsync(async (req, res) => {
-  const user = await projectService.getAllProjectByUserId(req.params.projectId);
+  const user = await projectService.getAllProjectByUserId(req.params.userId);
   res.send(user);
 });
 
