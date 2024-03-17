@@ -3,6 +3,7 @@ const { objectId } = require('./custom.validation');
 
 const createTimelog = {
   body: Joi.object().keys({
+    title: Joi.string().required(),
     startTime: Joi.date().required(),
     endTime: Joi.date().required(),
     createdBy: Joi.required().required().custom(objectId),

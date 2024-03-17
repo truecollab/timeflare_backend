@@ -6,8 +6,7 @@ const timelogController = require('../../controllers/timelog.controller');
 
 const router = express.Router();
 // change the controllers
-
-// router.route('/').post(auth('createTimelog'), validate(timelogValidation.createTimelog), timelogController.createTimelog);
+ router.route('/').post(auth('createTimelog'), validate(timelogValidation.createTimelog), timelogController.createTimelog);
 
 router
 	.route('/:createdBy')
@@ -19,7 +18,7 @@ router
 	.delete(auth('manageProject'), validate(timelogValidation.deleteTimelogById), timelogController.deleteTimelogById);
 
 //TODO: get timelogs by userid and by start time and end time
-router.route('/user/:userId/:startTime/:endTime').get(auth('getTimelogByUserId'), validate(timelogValidation.getTimelogByUserId), timelogController.getDateRangeUserTimelog);
+//router.route('/:createdBy/fetch')
 
 
 router
@@ -28,7 +27,8 @@ router
 
 router
 	.route('/all/:createdBy')
-	.get(auth('getAllTimelog'), validate(timelogValidation.getAllTimelog), timelogController.getAllTimelog);
+	.get(auth('getAllTimelog'), validate(timelogValidation.getAllTimelog), timelogController.getAllTimelog)
+	.get(auth('getTimelogByTimeframe'), validate(timelogValidation.getTimelogByTimeframe), timelogController.getDateRangeUserTimelog);
 
 module.exports = router;
 
