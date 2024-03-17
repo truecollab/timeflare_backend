@@ -7,7 +7,7 @@ const timelogController = require('../../controllers/timelog.controller');
 const router = express.Router();
 // change the controllers
 
-// router.route('/').post(auth('createTimelog'), validate(timelogValidation.createTimelog), timelogController.createTimelog);
+router.route('/').post(auth('createTimelog'), validate(timelogValidation.createTimelog), timelogController.createTimelog);
 
 router
 	.route('/:createdBy')
