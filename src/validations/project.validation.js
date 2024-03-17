@@ -16,6 +16,12 @@ const getProjectDetailsById = {
   }),
 };
 
+const getProjectDetailsByUserId = {
+  params: Joi.object().keys({
+    userId: Joi.string().required().custom(objectId),
+  }),
+};
+
 const getAllProjects = {
   params: Joi.object().keys({
     createdBy: Joi.required().custom(objectId),
@@ -76,4 +82,5 @@ module.exports = {
   deteteAllProjects,
   manageMembersToProject,
   deleteAllMemberFromProject,
+  getProjectDetailsByUserId,
 };

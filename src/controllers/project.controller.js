@@ -44,6 +44,11 @@ const viewProjectMembers = catchAsync(async (req, res) => {
   res.send(user);
 });
 
+const getAllProjectByUserId = catchAsync(async (req, res) => {
+  const user = await projectService.getAllProjectByUserId(req.params.projectId);
+  res.send(user);
+});
+
 module.exports = {
   createProject,
   getProjectById,
@@ -52,4 +57,5 @@ module.exports = {
   addProjectMembers,
   deleteProjectMembers,
   viewProjectMembers,
+  getAllProjectByUserId,
 };

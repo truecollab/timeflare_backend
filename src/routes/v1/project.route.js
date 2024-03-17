@@ -21,6 +21,10 @@ router
   .post(auth('manageMembers'), validate(projectValidation.manageMembersToProject), projectController.addProjectMembers)
   .delete(auth('manageMembers'), validate(projectValidation.manageMembersToProject), projectController.deleteProjectMembers);
 
+router
+  .route('/getAllProjects/:userId')
+  .get(auth('getProject'), validate(projectValidation.getProjectDetailsByUserId), projectController.getAllProjectByUserId);
+
 module.exports = router;
 
 /**
