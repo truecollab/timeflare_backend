@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -49,11 +49,29 @@ const userSchema = mongoose.Schema(
       default: false,
     },
     managedProjects: {
-      type: Array,
+      type: [mongoose.Schema.Types.ObjectId], // Assuming managedProjects are referencing other documents
+      ref: 'Project', // Assuming managedProjects refer to documents in a 'Project' collection
     },
     projects: {
-      type: Array,
+      type: [mongoose.Schema.Types.ObjectId], // Assuming projects are referencing other documents
+      ref: 'Project', // Assuming projects refer to documents in a 'Project' collection
       default: [], // Set the default value as an empty array
+    },
+    avatar: {
+      type: String,
+      default: '/assets/avatars/photo.png', // Assuming a default avatar path
+    },
+    city: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    jobTitle: {
+      type: String,
+    },
+    timezone: {
+      type: String,
     },
     meta: {
       type: Array,
@@ -63,6 +81,7 @@ const userSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
 
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);

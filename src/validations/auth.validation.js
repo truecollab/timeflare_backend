@@ -7,6 +7,11 @@ const register = {
 		password: Joi.string().required().custom(password),
 		name: Joi.string().required(),
 		isManager: Joi.boolean().optional(),
+	    avatar: Joi.string().optional(),
+	    city: Joi.string().optional(),
+	    country: Joi.string().optional(),
+	    jobTitle: Joi.string().optional(),
+	    timezone: Joi.string().optional()
 	}),
 };
 
