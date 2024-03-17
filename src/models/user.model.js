@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -40,15 +40,48 @@ const userSchema = mongoose.Schema(
       enum: roles,
       default: 'user',
     },
+    isManager: {
+      type: Boolean,
+      default: false,
+    },
     isEmailVerified: {
       type: Boolean,
       default: false,
+    },
+    managedProjects: {
+      type: [mongoose.Schema.Types.ObjectId], // Assuming managedProjects are referencing other documents
+      ref: 'Project', // Assuming managedProjects refer to documents in a 'Project' collection
+    },
+    projects: {
+      type: [mongoose.Schema.Types.ObjectId], // Assuming projects are referencing other documents
+      ref: 'Project', // Assuming projects refer to documents in a 'Project' collection
+      default: [], // Set the default value as an empty array
+    },
+    avatar: {
+      type: String,
+      default: '/assets/avatars/photo.png', // Assuming a default avatar path
+    },
+    city: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    jobTitle: {
+      type: String,
+    },
+    timezone: {
+      type: String,
+    },
+    meta: {
+      type: Array,
     },
   },
   {
     timestamps: true,
   }
 );
+
 
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
@@ -80,6 +113,10 @@ userSchema.pre('save', async function (next) {
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);
   }
+  // Add the user ID to the projects array if it's not already included
+  // if (!this.projects.includes(this.id)) {
+  //   this.projects.unshift(this.id); // Add the user ID as the first element
+  // }
   next();
 });
 

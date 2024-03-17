@@ -11,8 +11,15 @@ const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  return User.create(userBody);
+  return User.create(userBody); 
 };
+
+const createProject = async (projectBody) => {
+  if (await Project.isNomProjectTaken(projectBody.nomProjecte)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Nom de projecte ja existent');
+  }
+  return Project.create(projectBody);
+}
 
 /**
  * Query for users

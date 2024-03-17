@@ -1,23 +1,29 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const userValidation = require('../../validations/user.validation');
-const userController = require('../../controllers/user.controller');
+const projectValidation = require('../../validations/project.validation');
+const projectController = require('../../controllers/project.controller');
 
 const router = express.Router();
-//v1/users/ is the endpoint
-// router
-//   .route('/')
-//   .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-//   .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
+// change the controllers
 
-router.route('/').get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
+router.route('/').post(auth('manageProject'), validate(projectValidation.createProject), projectController.createProject);
 
 router
-  .route('/:userId')
-  .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
-  .patch(auth('manageUsers'), validate(userValidation.updateUser), userController.updateUser)
-  .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
+  .route('/:projectId')
+  .get(auth('getProject'), validate(projectValidation.getProjectDetailsById), projectController.getProjectById)
+  .patch(auth('manageProject'), validate(projectValidation.updateProjectById), projectController.updatetProjectById)
+  .delete(auth('manageProject'), validate(projectValidation.deleteProjectById), projectController.deleteProjectById);
+
+router
+  .route('/:projectId/manageMembers')
+  .get(auth('manageMembers'), validate(projectValidation.getProjectDetailsById), projectController.viewProjectMembers)
+  .post(auth('manageMembers'), validate(projectValidation.manageMembersToProject), projectController.addProjectMembers)
+  .delete(auth('manageMembers'), validate(projectValidation.manageMembersToProject), projectController.deleteProjectMembers);
+
+router
+  .route('/getAllProjects/:userId')
+  .get(auth('getProject'), validate(projectValidation.getProjectDetailsByUserId), projectController.getAllProjectByUserId);
 
 module.exports = router;
 

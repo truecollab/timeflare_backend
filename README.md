@@ -150,15 +150,15 @@ The environment variables can be found and modified in the `.env` file. They com
 PORT=3000
 
 # URL of the Mongo DB
-MONGODB_URL=mongodb://64.225.28.81:27017/
+MONGODB_URL=mongodb://64.225.28.81:27017/timeflare
 
 # JWT
 # JWT secret key
 JWT_SECRET=thisisasamplesecret
 # Number of minutes after which an access token expires
-JWT_ACCESS_EXPIRATION_MINUTES=30
+JWT_ACCESS_EXPIRATION_MINUTES=300
 # Number of days after which a refresh token expires
-JWT_REFRESH_EXPIRATION_DAYS=30
+JWT_REFRESH_EXPIRATION_DAYS=300
 
 # SMTP configuration options for the email service
 # For testing, you can use a fake SMTP service like Ethereal: https://ethereal.email/create
@@ -204,7 +204,6 @@ List of available routes:
 `POST /v1/auth/verify-email` - verify email
 
 **User routes**:\
-`POST /v1/users` - create a user\
 `GET /v1/users` - get all users\
 `GET /v1/users/:userId` - get user\
 `PATCH /v1/users/:userId` - update user\
