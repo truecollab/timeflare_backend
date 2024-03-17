@@ -80,9 +80,9 @@ const getTimelogByProjectId = {
 
 const getTimelogByTimeframe = {
   params: Joi.object().keys({
-    createdBy: Joi.string().required().custom(objectId),
+    createdBy: Joi.string().required().custom(objectId)
   }),
-  params: Joi.object().keys({
+  query: Joi.object().keys({
     startTime: Joi.date().required(),
     endTime: Joi.date().required(),
   }),

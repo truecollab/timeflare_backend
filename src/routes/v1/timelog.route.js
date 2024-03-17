@@ -28,6 +28,10 @@ router
 router
 	.route('/all/:createdBy')
 	.get(auth('getAllTimelog'), validate(timelogValidation.getAllTimelog), timelogController.getAllTimelog)
+	
+
+router
+	.route('/dateRange/:createdBy')
 	.get(auth('getTimelogByTimeframe'), validate(timelogValidation.getTimelogByTimeframe), timelogController.getDateRangeUserTimelog);
 
 module.exports = router;
