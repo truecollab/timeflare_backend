@@ -25,6 +25,14 @@ const getAllTimelog = catchAsync(async (req, res) => {
 	res.send(timelog);
 });
 
+const getDateRangeUserTimelog = catchAsync(async (req, res) => {	
+	const timelog = await timelogService.getDateRangeUserTime(req.params.createdBy, req.params);
+	if (!timelog) {
+		throw new ApiError(httpStatus.NOT_FOUND, 'timelog not found');
+	}
+	res.send(timelog);
+});
+
 const getAllTimelogFilter = catchAsync(async (req, res) => {
 	// const createdBy = req.params.createdBy;
 	// const timelogId = req.params.timelogId;
@@ -57,4 +65,5 @@ module.exports = {
 	deleteTimelogById,
 	getTimelogByTimelogId,
 	getAllTimelogFilter,
+	getDateRangeUserTimelog
 };

@@ -8,6 +8,7 @@ const allRoles = {
     'createTimelog',
     'getTimelogById',
     'getAllTimelog',
+    'getTimelogByTimeframe'
   ],
   admin: ['getUsers', 'manageUsers'],
 };

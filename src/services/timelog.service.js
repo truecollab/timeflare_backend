@@ -63,6 +63,11 @@ const updateTimelogById = async (userId, timelogId, timelogBody) => {
 	return timelog;
 };
 
+const getDateRangeUserTime = async (createdBy, timelogBody) =>{
+	const timelog = await Timelog.find({ createdBy: createdBy, startTime: { $gte: timelogBody.startTime, $lte: timelogBody.endTime } });
+	return timelog;
+}
+
 const queryTimelog = async (filter, options) => {
 	const timelog = await Timelog.paginate(filter, options);
 	return timelog;
@@ -87,4 +92,5 @@ module.exports = {
 	updateTimelogById,
 	deleteTimelogById,
 	getTimelogByProjectId,
+	getDateRangeUserTime
 };

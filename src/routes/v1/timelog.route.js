@@ -18,6 +18,10 @@ router
 	.patch(auth('manageProject'), validate(timelogValidation.updateTimelogById), timelogController.updateTimelogById)
 	.delete(auth('manageProject'), validate(timelogValidation.deleteTimelogById), timelogController.deleteTimelogById);
 
+//TODO: get timelogs by userid and by start time and end time
+router.route('/user/:userId/:startTime/:endTime').get(auth('getTimelogByUserId'), validate(timelogValidation.getTimelogByUserId), timelogController.getDateRangeUserTimelog);
+
+
 router
 	.route('/project/:projectId')
 	.get(auth('manageMembers'), validate(timelogValidation.getTimelogByProjectId), timelogController.getTimelogByTimelogId);
