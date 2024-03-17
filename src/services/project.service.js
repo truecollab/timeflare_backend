@@ -27,6 +27,10 @@ const createProject = async (projectBody) => {
     user.managedProjects.push(project.id);
     await user.save();
   }
+  if (!user.projects.includes(project.id)) {
+    user.projects.push(project.id);
+    await user.save();
+  }
   return project;
 };
 
@@ -65,10 +69,14 @@ const getAllProjectByUserId = async (userId) => {
   }
   const projectList = userData.get('projects');
   const projectListDetails = [];
-  projectList.forEach((projectId) => {
-    const projectData = Project.findById(projectId);
+  const projectListDetailsPromise = projectList.map(async (projectId) => {
+    const projectData = await Project.findById(projectId);
+    if (!projectData) {
+      throw new ApiError(httpStatus.NOT_FOUND, `Project with ID ${projectId} not found`);
+    }
     projectListDetails.push(projectData);
   });
+  await Promise.all(projectListDetailsPromise);
   return projectListDetails;
 };
 
