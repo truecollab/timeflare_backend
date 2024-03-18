@@ -12,7 +12,6 @@ const createTimelog = async (timelogBody) => {
   // Check for overlapping time entries
   const overlappingTimelog = await Timelog.findOne({
     createdBy: timelogBody.createdBy,
-    projectId: timelogBody.projectId,
     $or: [
       {
         startTime: { $lte: timelogBody.endTime },
