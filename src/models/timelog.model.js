@@ -28,6 +28,10 @@ const timelogSchema = mongoose.Schema(
     remarks: {
       type: Array,
     },
+    title: {
+      type: String,
+      required: true,
+    },
     isEditable: {
       type: Boolean,
       default: true,
