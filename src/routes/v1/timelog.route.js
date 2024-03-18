@@ -31,7 +31,7 @@ router
 	
 
 router
-	.route('/dateRange/:createdBy')
+	.route('/dateRange/:createdBy/getTimelogByTimeframe')
 	.get(auth('getTimelogByTimeframe'), validate(timelogValidation.getTimelogByTimeframe), timelogController.getDateRangeUserTimelog);
 
 module.exports = router;

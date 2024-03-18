@@ -26,7 +26,7 @@ const getAllTimelog = catchAsync(async (req, res) => {
 });
 
 const getDateRangeUserTimelog = catchAsync(async (req, res) => {	
-	const timelog = await timelogService.getDateRangeUserTime(req.params.createdBy, req.params);
+	const timelog = await timelogService.getDateRangeUserTime(req.params.createdBy, req.query);
 	if (!timelog) {
 		throw new ApiError(httpStatus.NOT_FOUND, 'timelog not found');
 	}
