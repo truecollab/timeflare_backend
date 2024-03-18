@@ -59,16 +59,20 @@ const getProjectById = async (projectId) => {
  * @returns {Promise<Project>}
  */
 const getAllProjectByUserId = async (userId) => {
-  const userData = User.findById(userId);
+  const userData = await User.findById(userId);
   if (!userData) {
     throw new ApiError(httpStatus.NOT_FOUND, `User with ID ${userId} not found`);
   }
   const projectList = userData.get('projects');
   const projectListDetails = [];
-  projectList.forEach((projectId) => {
-    const projectData = Project.findById(projectId);
+  const projectListDetailsPromise = projectList.map(async (projectId) => {
+    const projectData = await Project.findById(projectId);
+    if (!projectData) {
+      throw new ApiError(httpStatus.NOT_FOUND, `Project with ID ${projectId} not found`);
+    }
     projectListDetails.push(projectData);
   });
+  await Promise.all(projectListDetailsPromise);
   return projectListDetails;
 };
 
