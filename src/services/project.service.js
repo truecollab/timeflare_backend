@@ -111,22 +111,29 @@ const deleteProjectById = async (projectId, projectBody) => {
   if (!project) {
     throw new ApiError(httpStatus.NOT_FOUND, `Project with ID ${projectId} not found`);
   }
+
   // Check if managerId matches createdBy
   if (project.createdBy !== projectBody.createdBy) {
     throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized to delete this project');
   }
-  // Remove project ID from the projects array inside each user
-  project.users.forEach(async (userId) => {
+
+  // Define an array to store promises for removing project ID from users' projects array
+  const removeUserProjectPromises = project.users.map(async (userId) => {
     const user = await User.findById(userId);
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, `User with ID ${projectBody.createdBy} not found`);
+      throw new ApiError(httpStatus.NOT_FOUND, `User with ID ${userId} not found`);
     }
     const index = user.projects.indexOf(project.id);
     if (index !== -1) {
       user.projects.splice(index, 1);
+      await user.save();
     }
-    await user.save();
   });
+
+  // Execute all promises concurrently
+  await Promise.all(removeUserProjectPromises);
+
+  // Remove project ID from the managedProjects array of the project creator
   const user = await User.findById(projectBody.createdBy);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, `User with ID ${projectBody.createdBy} not found`);
@@ -134,10 +141,12 @@ const deleteProjectById = async (projectId, projectBody) => {
   const index = user.managedProjects.indexOf(project.id);
   if (index !== -1) {
     user.managedProjects.splice(index, 1);
+    await user.save();
   }
-  await user.save();
+
   // Remove the project
   await project.remove();
+
   return project;
 };
 
