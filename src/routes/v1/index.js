@@ -4,6 +4,7 @@ const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
 const projectRoute = require('./project.route');
 const timelogRoute = require('./timelog.route');
+const reportRoute = require('./report.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -25,6 +26,10 @@ const defaultRoutes = [
     path: '/timelog',
     route: timelogRoute,
   },
+  {
+    path: '/report',
+    route: reportRoute,
+  }
 ];
 
 const devRoutes = [

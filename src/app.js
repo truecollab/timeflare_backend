@@ -56,6 +56,11 @@ if (config.env === 'production') {
 // v1 api routes
 app.use('/v1', routes);
 
+//http://localhost:3000/reports/43e90d84-6d12-45e9-83c1-1057414fdf57.pdf doesnt work fix it
+// serve reports
+app.use('/reports', express.static('/reports'));
+
+
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
