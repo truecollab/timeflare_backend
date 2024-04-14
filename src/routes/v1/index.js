@@ -5,6 +5,7 @@ const docsRoute = require('./docs.route');
 const projectRoute = require('./project.route');
 const timelogRoute = require('./timelog.route');
 const config = require('../../config/config');
+const sendEmailRoute = require('./sendEmail.route');
 
 const router = express.Router();
 
@@ -24,6 +25,10 @@ const defaultRoutes = [
   {
     path: '/timelog',
     route: timelogRoute,
+  },
+  {
+    path: '/send-email',
+    route: sendEmailRoute,
   },
 ];
 

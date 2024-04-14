@@ -1,37 +1,12 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const timelogValidation = require('../../validations/timelog.validation');
-const timelogController = require('../../controllers/timelog.controller');
+const sendEmailValidation = require('../../validations/sendEmail.validation');
+const sendEmailController = require('../../controllers/sendEmail.controller');
 
 const router = express.Router();
 // change the controllers
-router.route('/').post(auth('createTimelog'), validate(timelogValidation.createTimelog), timelogController.createTimelog);
-
-router
-  .route('/:createdBy')
-  .get(auth('getTimelogById'), validate(timelogValidation.getTimelogById), timelogController.getTimelogById);
-
-router
-  .route('/:createdBy/modify/:timelogId')
-  .patch(auth('manageProject'), validate(timelogValidation.updateTimelogById), timelogController.updateTimelogById)
-  .delete(auth('manageProject'), validate(timelogValidation.deleteTimelogById), timelogController.deleteTimelogById);
-
-router
-  .route('/project/:projectId')
-  .get(auth('manageMembers'), validate(timelogValidation.getTimelogByProjectId), timelogController.getTimelogByTimelogId);
-
-router
-  .route('/all/:createdBy')
-  .get(auth('getAllTimelog'), validate(timelogValidation.getAllTimelog), timelogController.getAllTimelog);
-
-router
-  .route('/dateRange/:createdBy/getTimelogByTimeframe')
-  .get(
-    auth('getTimelogByTimeframe'),
-    validate(timelogValidation.getTimelogByTimeframe),
-    timelogController.getDateRangeUserTimelog
-  );
+router.route('/').post(auth('sendEmail'), validate(sendEmailValidation.sendEmail), sendEmailController.sendEmail);
 
 module.exports = router;
 
