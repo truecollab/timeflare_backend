@@ -10,6 +10,7 @@ const allRoles = {
     'getAllTimelog',
     'getTimelogByTimeframe',
     'getReport',
+    'sendEmail',
   ],
   admin: ['getUsers', 'manageUsers'],
 };
