@@ -66,11 +66,23 @@ const getAllProjectByUserId = async (userId) => {
   const projectList = userData.get('projects');
   const projectListDetails = [];
   const projectListDetailsPromise = projectList.map(async (projectId) => {
+    let result = {};
     const projectData = await Project.findById(projectId);
     if (!projectData) {
       throw new ApiError(httpStatus.NOT_FOUND, `Project with ID ${projectId} not found`);
     }
-    projectListDetails.push(projectData);
+    const projectCreatorData = await User.findById(projectData.createdBy);
+    result = { ...projectData._doc };
+    result.createdByUserName = projectCreatorData.name;
+    const projectUserDataArr = [];
+    const removeUserProjectPromises = projectData.users.map(async (projectUserId) => {
+      const user = await User.findById(projectUserId);
+      projectUserDataArr.push(user);
+    });
+    // Execute all promises concurrently
+    await Promise.all(removeUserProjectPromises);
+    result.projectUserDataArr = projectUserDataArr;
+    projectListDetails.push(result);
   });
   await Promise.all(projectListDetailsPromise);
   return projectListDetails;
