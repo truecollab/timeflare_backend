@@ -7,7 +7,13 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+const timeLogService = require('./timelog.service');
+const projectService = require('./project.service');
+const emailService = require('./email.service');
 
+//projectid and project title map
+
+var projectMap = {};
 /**
  * Generate a report
  * @param {Object} reportBody
@@ -19,55 +25,28 @@ const generateReport = async (reportBody) => {
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
+    var timelogBody = {
+        createdBy: reportBody.createdBy,
+        startTime: reportBody.startTime,
+        endTime: reportBody.endTime,
+        projects: reportBody.projects
+    }
+    var timelogs = await timeLogService.getDateRangeUserTime(reportBody.createdBy, timelogBody);
+    // sort timelogs by start time
+    timelogs.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 
+    //TODO: Use the user id, date range, project to get the timelog data  from report body
+    //and make the HTML for report content
+
+    console.log(timelogs);
     //Make content using the timelog data computed from the user id, date range, project
-    const content = `
-    <html>
-    <head>
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            table, th, td {
-                border: 1px solid black;
-            }
-            th, td {
-                padding: 15px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Report</h1>
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Project</th>
-                <th>Time</th>
-            </tr>
-            <tr>
-                <td>2021-10-01</td>
-                <td>Project 1</td>
-                <td>2 hours</td>
-            </tr>
-            <tr>
-                <td>2021-10-02</td>
-                <td>Project 2</td>
-                <td>3 hours</td>
-            </tr>
-        </table>
-    </body>
-    </html>
-    `;
+    const content = generateReportTable(timelogs);
     const fileName = uuidv4();
     const filePath = path.join(__dirname, `../reports/${fileName
     }.pdf`);
     //make pdf from the content
-    await fs
+    (async () => {
+     await fs
         .writeFileSync(filePath, content);
     await page.setContent(content);
     await page.pdf({
@@ -76,6 +55,7 @@ const generateReport = async (reportBody) => {
         printBackground: true,
     });
     await browser.close();  
+    })();
     reportBody.reportUrl = filePath;
     reportBody.reportName = fileName;
     reportBody.reportType = 'timesheet';
@@ -83,9 +63,9 @@ const generateReport = async (reportBody) => {
 
     // const report = await Report.create(reportBody);
      const fileData = fs.readFileSync(filePath);
-     
-    //send the blob pdf file to the front end
 
+    await emailService.sendEmail("nikhilram@vt.edu", 'Report', 'Please find the attached report', fileData, fileName);
+     
     return fileData;
 
 }
@@ -101,6 +81,63 @@ const getReportById = async (reportId) => {
         .populate('projects')
         .populate('timelog');
 }
+
+function generateReportTable(data) {
+    // Initialize variables to store the HTML table and total time spent
+    let tableHtml = `
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Time Spent</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+    let totalTimeSpent = 0;
+  
+    // Loop through each entry in the data array
+    data.forEach(entry => {
+      // Calculate time spent (difference between end time and start time)
+      const startTime = new Date(entry.startTime);
+      const endTime = new Date(entry.endTime);
+      const timeSpent = (endTime - startTime) / (1000 * 60 * 60); // Convert milliseconds to hours
+  
+      // Add time spent to the total
+      totalTimeSpent += timeSpent;
+  
+      // Append a row for the current entry to the tableHtml
+      tableHtml += `
+        <tr>
+          <td>${entry.title}</td>
+          <td>${entry.description}</td>
+          <td>${startTime.toLocaleString()}</td>
+          <td>${endTime.toLocaleString()}</td>
+          <td>${timeSpent.toFixed(2)} hours</td>
+        </tr>
+      `;
+    });
+  
+    // Close the table
+    tableHtml += `
+        </tbody>
+      </table>
+    `;
+  
+    // Add the total time spent row
+    tableHtml += `
+      <div>
+        <p>Total Time Spent: ${totalTimeSpent.toFixed(2)} hours</p>
+      </div>
+    `;
+  
+    // Return the generated HTML table
+    return tableHtml;
+  }
+  
 
 module.exports = {
     generateReport,

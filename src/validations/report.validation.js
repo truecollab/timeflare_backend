@@ -8,6 +8,7 @@ const getReport = {
         startTime: Joi.date().required(),
         endTime: Joi.date().required(),
         projects: Joi.array().required(),
+        createdBy: Joi.string().required(),
         
     }),
     };
