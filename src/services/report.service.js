@@ -1,7 +1,7 @@
 //generate report service where using pupeetter you can generate the pdf report from the data of (user id, date range, project)
 
 const httpStatus = require('http-status');
-const { Report, User } = require('../models');
+const { Report, User } =require('../models');
 const ApiError = require('../utils/ApiError');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
@@ -9,8 +9,7 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const timeLogService = require('./timelog.service');
 const projectService = require('./project.service');
-const emailService = require('./email.service');
-
+const emailService = require('./sendEmail.service');
 //projectid and project title map
 
 var projectMap = {};
@@ -62,10 +61,17 @@ const generateReport = async (reportBody) => {
     reportBody.exportType = 'pdf';
 
     // const report = await Report.create(reportBody);
-     const fileData = fs.readFileSync(filePath);
-
-    await emailService.sendEmail("nikhilram@vt.edu", 'Report', 'Please find the attached report', fileData, fileName);
-     
+    const fileData = fs.readFileSync(filePath);
+    await emailService.sendEmail(
+      {
+        "to" : "nikhilram@vt.edu",
+        "subject": "Sending Mail for your latest Invoice",
+        "text": "Thank you for working with us, please find your attached invoice. We are pleased to have your service. Thank you",
+        "filename": fileName,
+        "pdfPath": filePath
+       }
+    )
+   // await emailService.sendEmailWithAttachment('nikhilram@vt.edu', 'Report', 'Please find the attached report', [{ filename: "Report.pdf", path: filePath }]);
     return fileData;
 
 }

@@ -2,6 +2,7 @@ const { Strategy: JwtStrategy, ExtractJwt, Strategy: GoogleStrategy  } = require
 const config = require('./config');
 const { tokenTypes } = require('./tokens');
 const { User } = require('../models');
+const { BearerStrategy } = require('passport-azure-ad');
 
 const jwtOptions = {
   secretOrKey: config.jwt.secret,
@@ -25,25 +26,20 @@ const jwtVerify = async (payload, done) => {
 
 const jwtStrategy = new JwtStrategy(jwtOptions, jwtVerify);
 
-// const googleStrategy = new GoogleStrategy(
-//   {
-//     clientID: config.google.clientId,
-//     clientSecret: config.google.clientSecret,
-//     callbackURL: config.google.callbackURL,
-//   },
-//   async (accessToken, refreshToken, profile, done) => {
-//     try {
-//       const user = await User.findOrCreate({ googleId: profile.id });
-//       return done(null, user);
-//     } catch (error) {
-//       return done(error);
-//     }
-//   }
+const microsoftStrategy = new BearerStrategy({
+  identityMetadata: 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration',
+  clientID: 'YOUR_CLIENT_ID',
+  clientSecret: 'YOUR_CLIENT_SECRET',
+  callbackURL: 'http://localhost:3000/oauth/microsoft/auth/callback'
+}, (token, done) => {
+  // Validate token and extract user information
+  done(null, token);
+})
 
-  
-// );
+
  
 module.exports = {
-  jwtStrategy
+  jwtStrategy,
+  microsoftStrategy
   
 };

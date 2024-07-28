@@ -8,9 +8,9 @@ const {reportService} = require('../services/index');
 
 const getReport = catchAsync(async (req, res) => {
     const report = await reportService.generateReport(req.body);
-         res.setHeader('Content-Type', 'application/pdf');
-     res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
-    // res.send(fileData);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
+
     res.send(report);
 }
 );

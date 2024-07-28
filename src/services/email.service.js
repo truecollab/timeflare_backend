@@ -23,6 +23,13 @@ const sendEmail = async (to, subject, text) => {
   await transport.sendMail(msg);
 };
 
+//use this function to send email with attachment eg. call 
+//sendEmailWithAttachment('to', 'subject', 'text', [{ filename: 'filename', path: 'path' }])
+const sendEmailWithAttachment = async (to, subject, text, attachments) => {
+  const msg = { from: config.email.from, to, subject, text, attachments };
+  await transport.sendMail(msg);
+};
+
 /**
  * Send reset password email
  * @param {string} to
@@ -60,4 +67,5 @@ module.exports = {
   sendEmail,
   sendResetPasswordEmail,
   sendVerificationEmail,
+  sendEmailWithAttachment,
 };

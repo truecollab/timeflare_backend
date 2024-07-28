@@ -8,19 +8,22 @@ const passport = require('passport');
 const httpStatus = require('http-status');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
-const { jwtStrategy, facebookStrategy, googleStrategy } = require('./config/passport');
+const { jwtStrategy, microsoftStrategy } = require('./config/passport');
 const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
+//const oauthRoutes = require('./routes/oauth'); 
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
-
+const { BearerStrategy } = require('passport-azure-ad');
+//const graph = require('@microsoft/microsoft-graph-client');
+ 
 const app = express();
 
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);
 }
-
+ 
 // set security HTTP headers
 app.use(helmet());
 
@@ -43,9 +46,11 @@ app.options('*', cors());
 
 // jwt authentication
 app.use(passport.initialize());
- passport.use('jwt', jwtStrategy);
-// passport.use('facebook', facebookStrategy);
+passport.use('jwt', jwtStrategy);
+passport.use(microsoftStrategy);
 // passport.use('google', googleStrategy);
+
+
 
 
 // limit repeated failed requests to auth endpoints
@@ -55,6 +60,8 @@ if (config.env === 'production') {
 
 // v1 api routes
 app.use('/v1', routes);
+
+//app.use('/oauth', oauthRoutes);
 
 //http://localhost:3000/reports/43e90d84-6d12-45e9-83c1-1057414fdf57.pdf doesnt work fix it
 // serve reports
